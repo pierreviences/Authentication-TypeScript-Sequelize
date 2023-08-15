@@ -86,6 +86,7 @@ const RefreshToken = async (req: express.Request, res: express.Response) => {
   try {
     const refreshToken = req.cookies?.refreshToken;
 
+    console.log(refreshToken);
     if (!refreshToken) {
       return res
         .status(401)
@@ -98,7 +99,13 @@ const RefreshToken = async (req: express.Request, res: express.Response) => {
         .status(401)
         .send(Helper.ResponseData(401, "Unatuhorized", null, null));
     }
-    const token = Jwt.GenerateToken(decodedUser);
+    const token = Jwt.GenerateToken({
+      name: decodedUser.name,
+      email: decodedUser.email,
+      roleId: decodedUser.roleId,
+      verified: decodedUser.verified,
+      active: decodedUser.active,
+    });
     const resultUser = {
       name: decodedUser.name,
       email: decodedUser.email,

@@ -12,6 +12,11 @@ const Authenticated = (req: Request, res: Response, next: NextFunction) => {
         .send(Helper.ResponseData(401, "Unathorized", null, null));
     }
     const result = Jwt.ExtractToken(token!);
+    if (!result) {
+      return res
+        .status(401)
+        .send(Helper.ResponseData(401, "Unathorized", null, null));
+    }
     next();
   } catch (error: any) {
     res.status(500).send(Helper.ResponseData(500, "", error, null));
