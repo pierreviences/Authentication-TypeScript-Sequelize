@@ -147,4 +147,34 @@ const UserDetail = async (req: express.Request, res: express.Response) => {
   }
 };
 
-export default { Register, Login, RefreshToken, UserDetail };
+const UserLogout = async (req: express.Request, res: express.Response) => {
+  try {
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) {
+      return res
+        .status(200)
+        .send(Helper.ResponseData(200, "User logout", null, null));
+    }
+    const email = res.locals.userEmail;
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
+    if (!user) {
+      res.clearCookie("refreshToken");
+      return res
+        .status(200)
+        .send(Helper.ResponseData(200, "User logout", null, null));
+    }
+
+    await user.update({ accessToken: null }, { where: { email: email } });
+    res.clearCookie("refreshToken");
+    return res
+      .status(200)
+      .send(Helper.ResponseData(200, "User logout", null, null));
+  } catch (error) {
+    res.status(500).send(Helper.ResponseData(500, "", error, null));
+  }
+};
+export default { Register, Login, RefreshToken, UserDetail, UserLogout };
