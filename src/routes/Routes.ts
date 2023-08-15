@@ -10,7 +10,12 @@ const router = express.Router();
 router.get("/role", Authorization.Authenticated, RoleConstroller.getRole);
 router.post("/role", RoleConstroller.createRole);
 router.patch("/role/:id", RoleConstroller.updateRole);
-router.delete("/role/:id", RoleConstroller.deleteRole);
+router.delete(
+  "/role/:id",
+  Authorization.Authenticated,
+  Authorization.SuperUser,
+  RoleConstroller.deleteRole
+);
 router.get("/role/:id", RoleConstroller.GetRoleById);
 
 // User Routing
