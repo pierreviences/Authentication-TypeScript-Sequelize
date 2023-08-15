@@ -7,16 +7,44 @@ import Authorization from "../middleware/Authorization";
 const router = express.Router();
 
 // Role Routing
-router.get("/role", Authorization.Authenticated, RoleConstroller.getRole);
-router.post("/role", RoleConstroller.createRole);
-router.patch("/role/:id", RoleConstroller.updateRole);
+router.get(
+  "/role",
+  Authorization.Authenticated,
+  Authorization.BasicUser,
+  RoleConstroller.getRole
+);
+router.post(
+  "/role",
+  Authorization.Authenticated,
+  Authorization.AdminRole,
+  RoleConstroller.createRole
+);
+router.patch(
+  "/role/:id",
+  Authorization.Authenticated,
+  Authorization.AdminRole,
+  RoleConstroller.updateRole
+);
 router.delete(
   "/role/:id",
+
   Authorization.Authenticated,
   Authorization.SuperUser,
   RoleConstroller.deleteRole
 );
-router.get("/role/:id", RoleConstroller.GetRoleById);
+router.get(
+  "/role/:id",
+  Authorization.Authenticated,
+  Authorization.BasicUser,
+  RoleConstroller.GetRoleById
+);
+
+/*
+noted :
+- delete : superUser
+- create, update: adminRole
+- get : basicUser
+*/
 
 // User Routing
 router.post(
