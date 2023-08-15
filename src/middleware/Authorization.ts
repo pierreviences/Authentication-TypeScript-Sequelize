@@ -18,6 +18,7 @@ const Authenticated = (req: Request, res: Response, next: NextFunction) => {
         .send(Helper.ResponseData(401, "Unathorized", null, null));
     }
     res.locals.userEmail = result?.email;
+    res.locals.roleId = result?.roleId;
 
     next();
   } catch (error: any) {
@@ -25,4 +26,20 @@ const Authenticated = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default { Authenticated };
+const SuperUser = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const roleId = res.locals.roleId;
+    if (roleId !== 1) {
+      return res
+        .status(401)
+        .send(Helper.ResponseData(403, "Forbidden", null, null));
+    }
+    next();
+  } catch (error) {
+    res.status(500).send(Helper.ResponseData(500, "", error, null));
+  }
+};
+const SuperAdmin = () => {};
+const BasicUser = () => {};
+
+export default { Authenticated, SuperUser };
