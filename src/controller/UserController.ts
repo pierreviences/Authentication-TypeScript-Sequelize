@@ -123,4 +123,28 @@ const RefreshToken = async (req: express.Request, res: express.Response) => {
   }
 };
 
-export default { Register, Login, RefreshToken };
+const UserDetail = async (req: express.Request, res: express.Response) => {
+  try {
+    const email = res.locals.userEmail;
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user) {
+      return res
+        .status(404)
+        .send(Helper.ResponseData(404, "User Not Found", null, null));
+    }
+
+    user.password = "";
+    user.accessToken = "";
+
+    return res.status(200).send(Helper.ResponseData(200, "OK", null, user));
+  } catch (error) {
+    res.status(500).send(Helper.ResponseData(500, "", error, null));
+  }
+};
+
+export default { Register, Login, RefreshToken, UserDetail };
