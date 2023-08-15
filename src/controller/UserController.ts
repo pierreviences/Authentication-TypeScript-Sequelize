@@ -3,6 +3,7 @@ import express from "express";
 import Helper from "../helpers/Helper";
 import PasswordHelper from "../helpers/PasswordHelper";
 import Jwt from "../helpers/Jwt";
+import Role from "../db/models/Role";
 const Register = async (req: express.Request, res: express.Response) => {
   try {
     const { name, email, password, cofirmPassword } = req.body;
@@ -129,6 +130,10 @@ const UserDetail = async (req: express.Request, res: express.Response) => {
     const user = await User.findOne({
       where: {
         email: email,
+      },
+      include: {
+        model: Role,
+        attributes: ["id", "roleName"],
       },
     });
 
