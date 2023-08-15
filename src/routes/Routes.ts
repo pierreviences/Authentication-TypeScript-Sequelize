@@ -26,5 +26,6 @@ router.get(
   Authorization.Authenticated,
   UserController.UserDetail
 );
+router.get("/user/logout");
 
 export default router;
