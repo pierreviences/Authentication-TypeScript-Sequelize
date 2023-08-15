@@ -6,7 +6,7 @@ import Jwt from "../helpers/Jwt";
 import Role from "../db/models/Role";
 const Register = async (req: express.Request, res: express.Response) => {
   try {
-    const { name, email, password, cofirmPassword } = req.body;
+    const { name, email, password, roleId, cofirmPassword } = req.body;
     const passwordHashed = await PasswordHelper.passwordHashing(password);
     const user = await User.create({
       name,
@@ -14,7 +14,7 @@ const Register = async (req: express.Request, res: express.Response) => {
       password: passwordHashed,
       active: true,
       verified: true,
-      roleId: 1,
+      roleId: roleId,
     });
 
     return res

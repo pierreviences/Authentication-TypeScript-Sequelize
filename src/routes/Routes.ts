@@ -7,12 +7,7 @@ import Authorization from "../middleware/Authorization";
 const router = express.Router();
 
 // Role Routing
-router.get(
-  "/role",
-  Authorization.Authenticated,
-  Authorization.BasicUser,
-  RoleConstroller.getRole
-);
+router.get("/role", Authorization.Authenticated, RoleConstroller.getRole);
 router.post(
   "/role",
   Authorization.Authenticated,
@@ -35,7 +30,6 @@ router.delete(
 router.get(
   "/role/:id",
   Authorization.Authenticated,
-  Authorization.BasicUser,
   RoleConstroller.GetRoleById
 );
 

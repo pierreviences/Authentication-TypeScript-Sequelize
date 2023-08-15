@@ -12,11 +12,12 @@ const RegisterValidation = async (
   next: NextFunction
 ) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password, roleId, confirmPassword } = req.body;
     const data = {
       name,
       email,
       password,
+      roleId,
       confirmPassword,
     };
 
@@ -24,6 +25,7 @@ const RegisterValidation = async (
       name: "required|string|max:50",
       email: "required|email",
       password: "required|min:8",
+      roleId: "required",
       confirmPassword: "required|same:password",
     };
 
