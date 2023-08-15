@@ -12,7 +12,7 @@ interface UserData {
 
 const GenerateToken = (data: any): string => {
   const token = jwt.sign(data, process.env.JWT_TOKEN as string, {
-    expiresIn: "10m",
+    expiresIn: "10s",
   });
   return token;
 };
@@ -51,13 +51,12 @@ const ExtractRefreshToken = (token: string) => {
     } else {
       resData = decoded;
     }
-
-    if (resData) {
-      const result: UserData = <UserData>resData;
-      return result;
-    }
-    return null;
   });
+  if (resData) {
+    const result: UserData = <UserData>resData;
+    return result;
+  }
+  return null;
 };
 
 export default {

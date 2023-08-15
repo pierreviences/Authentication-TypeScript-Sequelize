@@ -82,4 +82,38 @@ const Login = async (req: express.Request, res: express.Response) => {
   }
 };
 
-export default { Register, Login };
+const RefreshToken = async (req: express.Request, res: express.Response) => {
+  try {
+    const refreshToken = req.cookies?.refreshToken;
+
+    if (!refreshToken) {
+      return res
+        .status(401)
+        .send(Helper.ResponseData(401, "Unatuhorized", null, null));
+    }
+
+    const decodedUser = Jwt.ExtractRefreshToken(refreshToken);
+    if (!decodedUser) {
+      return res
+        .status(401)
+        .send(Helper.ResponseData(401, "Unatuhorized", null, null));
+    }
+    const token = Jwt.GenerateToken(decodedUser);
+    const resultUser = {
+      name: decodedUser.name,
+      email: decodedUser.email,
+      roleId: decodedUser.roleId,
+      verified: decodedUser.verified,
+      active: decodedUser.active,
+      token: token,
+    };
+
+    return res
+      .status(200)
+      .send(Helper.ResponseData(200, "OK", null, resultUser));
+  } catch (error) {
+    res.status(500).send(Helper.ResponseData(500, "", error, null));
+  }
+};
+
+export default { Register, Login, RefreshToken };
